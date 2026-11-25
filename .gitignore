@@ -1,0 +1,24 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- Environment & secrets ---
+.env
+*.local
+
+# --- Data & artifacts ---
+backend/data/
+data/uploads/
+dist/
+node_modules/
+*.tsbuildinfo
+
+# --- Editors / OS ---
+.DS_Store
+.idea/
+.vscode/

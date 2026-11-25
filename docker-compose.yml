@@ -1,0 +1,37 @@
+# SmartSupport AI — dev infrastructure.
+# NOTE: PostgreSQL is ALREADY running (container `some-postgres`, port 5432,
+# user postgres / mysecretpassword) — it is intentionally not declared here
+# to avoid a port conflict. Create the databases once:
+#   docker exec some-postgres psql -U postgres -c "CREATE DATABASE smartsupport;"
+#   docker exec some-postgres psql -U postgres -c "CREATE DATABASE smartsupport_test;"
+#
+# Redis runs natively on this host (system service) — only `docker compose up`
+# with the `infra` profile if you prefer a containerized Redis instead.
+
+services:
+  redis:
+    profiles: ["infra"]
+    image: redis:7-alpine
+    container_name: smartsupport-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  ollama:
+    profiles: ["ollama"]
+    image: ollama/ollama:latest
+    container_name: smartsupport-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+
+volumes:
+  redis_data:
+  ollama_models:
